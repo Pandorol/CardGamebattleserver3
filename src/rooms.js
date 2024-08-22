@@ -7,6 +7,7 @@ class Rooms {
     }
     createRoom(roomid) {
         this.roomList[roomid] = new Room(roomid);
+
     }
 
     deleteRoom(roomid) {

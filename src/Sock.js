@@ -16,6 +16,7 @@ class Sock {
         // 启动服务器监听
         this.io.listen(this.config.port);
 
+
         // 启动 Redis 客户端连接并配置适配器
         this.initialize();
 

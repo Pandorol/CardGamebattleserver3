@@ -76,6 +76,7 @@ sock.io.on("connection", (socket) => {
         socket.join(roomid);
         console.log(`Created and joined room ${roomid} by user ${userid}`);
     }
+
     // console.log(socket.rooms)
     // console.log(global.players)
     //console.log(global.rooms)
