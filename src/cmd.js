@@ -7,6 +7,7 @@ CommonCMD = {
 gfiveCMD = {
     startact: "startact",
     endact: "endact",
+    getroomlist: "getroomlist",
 }
 module.exports = {
     CommonCMD,

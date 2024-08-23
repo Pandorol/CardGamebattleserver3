@@ -7,7 +7,7 @@ class Rooms {
     }
     createRoom(roomid) {
         this.roomList[roomid] = new Room(roomid);
-
+        redis.hset("rooms", roomid, JSON.stringify(this.roomList[roomid]))
     }
 
     deleteRoom(roomid) {
@@ -27,6 +27,8 @@ class Rooms {
             this.createRoom(roomid);
         }
         return this.roomList[roomid].addPlayer(userid);
+
+
     }
     canAddToRoom(roomid) {
         if (!this.roomList[roomid]) {
@@ -73,7 +75,7 @@ class Room {
         if (!this.owner) {
             this.setOwner(userid); // 设置第一个加入的玩家为房主，并发送通知
         }
-
+        redis.hset("rooms", this.roomid, JSON.stringify(this))
         this.playerList[userid].socket.emit(CommonCMD.cmdheadler,
             {
                 cmd: CommonCMD.joinroomsuc,
@@ -90,6 +92,7 @@ class Room {
     removePlayer(userid) {
         if (this.playerList[userid]) {
             delete this.playerList[userid];
+            redis.hset("rooms", this.roomid, JSON.stringify(this))
         }
         if (userid === this.owner) {
             const newOwner = Object.keys(this.playerList)[0];
@@ -132,7 +135,6 @@ class Room {
         this.actusers.forEach((userid) => {
             redis.set(userid, JSON.stringify(this.playerList[userid].data))
         })
-
     }
     setActEnd() {
         this.setActing(false)

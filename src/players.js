@@ -59,7 +59,14 @@ class Player {
     delete(key) {
         delete this.data[key];
     }
-
+    // 自定义 JSON 序列化方法，去除 socket
+    toJSON() {
+        // 仅返回想要序列化的属性
+        return {
+            userid: this.userid,
+            data: this.data
+        };
+    }
 }
 
 module.exports.Players = Players
