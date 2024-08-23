@@ -47,6 +47,7 @@ class Rooms {
             room.removePlayer(userid);
             console.log(`User ${userid} leaved room ${roomid}`)
             if (Object.keys(room.playerList).length === 0) {
+                console.log(`delete room ${roomid} `)
                 room.setActEnd()
                 this.deleteRoom(roomid);
             }

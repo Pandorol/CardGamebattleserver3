@@ -1,10 +1,12 @@
 const config = require('./config');
+const { CommonCMD } = require("../src/cmd")
 const gfiveAction = require('./actions');
 const util = require('../src/util');
 const { Sock } = require("../src/sock");
 const { Players } = require("../src/players");
 const { Rooms } = require("../src/rooms")
 const redis = require("../src/redismgr")
+
 global.config = config
 global.sock = new Sock(config)
 global.action = new gfiveAction()
@@ -49,6 +51,9 @@ sock.io.on("connection", (socket) => {
             player.data = JSON.parse(userdata)
             global.rooms.addPlayerToRoom(player.data.roomid, userid);
             socket.join(roomid);
+            let room = global.rooms.getRoom(roomid)
+            room.broadcast(CommonCMD.cmdheadler, { cmd: CommonCMD.rejoinroomsuc, userid: userid, userdata: player.data })
+            player.socket.emit(CommonCMD.cmdheadler, { cmd: CommonCMD.roomdatas, datas: JSON.parse(JSON.stringify(room)) })
             console.log(`User ${userid} rejoined room ${roomid}`);
         }
         else {

@@ -36,7 +36,21 @@ class gfiveAction {
                 console.log(err)
                 player.socket.emit(CommonCMD.cmdheadler, { cmd: gfiveCMD.getroomlist, roomList: [], code: retcode.commonerror })
             }
-
+        },
+        [gfiveCMD.readystatus]: async (player, data) => {
+            player.set('readystatus', data.readystatus)
+            let room = global.rooms.getRoom(player.data.roomid)
+            room.broadcast(CommonCMD.cmdheadler, { cmd: gfiveCMD.readyed, readystatus: data.readystatus, userid: player.userid })
+        },
+        [gfiveCMD.kickpos]: async (player, data) => {
+            if (!player.data.kickpos) {
+                player.set('kickpos', [])
+            }
+            player.data.kickpos.push(data.pos)
+            player.data.kickpos = Array.from(new Set(player.data.kickpos))
+            let room = global.rooms.getRoom(player.data.roomid)
+            room.broadcast(CommonCMD.cmdheadler, { cmd: gfiveCMD.kickpos, userid: player.userid, kickpos: player.data.kickpos })
+            redis.set(player.userid, JSON.stringify(player.data))
         }
     }
 
