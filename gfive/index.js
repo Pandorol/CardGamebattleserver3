@@ -22,14 +22,14 @@ sock.io.on("connection", (socket) => {
     if (!roomid) {
         socket.emit('error', { msg: 'Room ID is missing.' });
         socket.disconnect();
-        console.log(`Connection disconnected: Room ID missing for socket ${socket.id}`);
+        //console.log(`Connection disconnected: Room ID missing for socket ${socket.id}`);
         return;
     }
 
     if (!userid) {
         socket.emit('error', { msg: 'User ID is missing.' });
         socket.disconnect();
-        console.log(`Connection disconnected: User ID missing for socket ${socket.id}`);
+        //console.log(`Connection disconnected: User ID missing for socket ${socket.id}`);
         return;
     }
 
@@ -40,7 +40,7 @@ sock.io.on("connection", (socket) => {
     if (!roomExists && util.getObjLength(global.rooms.roomList) >= global.config.maxRoomNum) {
         socket.emit('error', { msg: 'Maximum room limit reached.' });
         socket.disconnect();
-        console.log(`Connection disconnected: Maximum room limit reached for socket ${socket.id}`);
+        //console.log(`Connection disconnected: Maximum room limit reached for socket ${socket.id}`);
         return;
     }
     let asyncfunc = async (socket) => {
@@ -52,22 +52,32 @@ sock.io.on("connection", (socket) => {
             global.rooms.addPlayerToRoom(player.data.roomid, userid);
             socket.join(roomid);
             let room = global.rooms.getRoom(roomid)
-            room.broadcast(CommonCMD.cmdheadler, { cmd: CommonCMD.rejoinroomsuc, userid: userid, userdata: player.data })
+            room.broadcast(CommonCMD.cmdheadler, { cmd: CommonCMD.rejoinroomsuc, player: { userid: userid, data: player.data } })
+            //console.log(JSON.parse(JSON.stringify(room)))
             player.socket.emit(CommonCMD.cmdheadler, { cmd: CommonCMD.roomdatas, datas: JSON.parse(JSON.stringify(room)) })
-            console.log(`User ${userid} rejoined room ${roomid}`);
+            //console.log(`User ${userid} rejoined room ${roomid}`);
         }
         else {
             global.players.add(socket, userid);
             global.rooms.addPlayerToRoom(roomid, userid);
             socket.join(roomid);
-            console.log(`User ${userid} joined room ${roomid}`);
+            let room = global.rooms.getRoom(roomid)
+            room.broadcast(CommonCMD.cmdheadler,
+                {
+                    cmd: CommonCMD.joinroomsuc,
+                    roomid: roomid,
+                    players: room.playerList,
+                    owner: room.owner // 返回房主的信息
+                }
+            )
+            //console.log(`User ${userid} joined room ${roomid}`);
         }
     }
     if (roomExists) {
         if (!global.rooms.canAddToRoom(roomid)) { // 房间已满
             socket.emit('error', { msg: 'Room is full.' });
             socket.disconnect();
-            console.log(`Connection disconnected: Room ${roomid} is full for socket ${socket.id}`);
+            //console.log(`Connection disconnected: Room ${roomid} is full for socket ${socket.id}`);
             return;
         }
         else {
@@ -79,7 +89,16 @@ sock.io.on("connection", (socket) => {
         global.players.add(socket, userid);
         global.rooms.addPlayerToRoom(roomid, userid);
         socket.join(roomid);
-        console.log(`Created and joined room ${roomid} by user ${userid}`);
+        let room = global.rooms.getRoom(roomid)
+        room.broadcast(CommonCMD.cmdheadler,
+            {
+                cmd: CommonCMD.joinroomsuc,
+                roomid: roomid,
+                players: room.playerList,
+                owner: room.owner // 返回房主的信息
+            }
+        )
+        //console.log(`Created and joined room ${roomid} by user ${userid}`);
     }
 
     // console.log(socket.rooms)

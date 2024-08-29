@@ -2,6 +2,7 @@ CommonCMD = {
     cmdheadler: "message",
     errorheadler: "error",
     joinroomsuc: "joinroomsuc",
+    leaveroom: "leaveroom",
     rejoinroomsuc: "rejoinroomsuc",
     roomdatas: "roomdatas",
     newOwner: "newOwner"
@@ -12,6 +13,7 @@ gfiveCMD = {
     getroomlist: "getroomlist",
     readystatus: "readystatus",
     kickpos: "kickpos",
+    atpos: "atpos",
 }
 module.exports = {
     CommonCMD,

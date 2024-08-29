@@ -45,11 +45,13 @@ class Rooms {
         if (room) {
 
             room.removePlayer(userid);
-            console.log(`User ${userid} leaved room ${roomid}`)
+
+            //console.log(`User ${userid} leaved room ${roomid}`)
             if (Object.keys(room.playerList).length === 0) {
-                console.log(`delete room ${roomid} `)
+                //console.log(`delete room ${roomid} `)
                 room.setActEnd()
                 this.deleteRoom(roomid);
+
             }
 
         }
@@ -77,14 +79,14 @@ class Room {
             this.setOwner(userid); // 设置第一个加入的玩家为房主，并发送通知
         }
         redis.hset("rooms", this.roomid, JSON.stringify(this))
-        this.playerList[userid].socket.emit(CommonCMD.cmdheadler,
-            {
-                cmd: CommonCMD.joinroomsuc,
-                roomid: this.roomid,
-                players: Object.keys(this.playerList),
-                owner: this.owner // 返回房主的信息
-            }
-        )
+        // this.playerList[userid].socket.emit(CommonCMD.cmdheadler,
+        //     {
+        //         cmd: CommonCMD.joinroomsuc,
+        //         roomid: this.roomid,
+        //         players: Object.keys(this.playerList),
+        //         owner: this.owner // 返回房主的信息
+        //     }
+        // )
         return true;
     }
     fullplayers() {
@@ -94,6 +96,10 @@ class Room {
         if (this.playerList[userid]) {
             delete this.playerList[userid];
             redis.hset("rooms", this.roomid, JSON.stringify(this))
+            this.broadcast(CommonCMD.cmdheadler, {
+                cmd: CommonCMD.leaveroom,
+                userid: userid,
+            });
         }
         if (userid === this.owner) {
             const newOwner = Object.keys(this.playerList)[0];
@@ -108,7 +114,7 @@ class Room {
             // 给房间人发新房主发送通知
             this.broadcast(CommonCMD.cmdheadler, {
                 cmd: CommonCMD.newOwner,
-                roomid: this.roomid,
+                owner: userid,
             });
         } else {
             this.owner = null; // 没有人时房主设为 null
@@ -133,9 +139,11 @@ class Room {
     setActStart() {
         this.setActing(true)
         this.actusers = Object.keys(this.playerList)
+
         this.actusers.forEach((userid) => {
             redis.set(userid, JSON.stringify(this.playerList[userid].data))
         })
+        redis.hset("rooms", this.roomid, JSON.stringify(this))
     }
     setActEnd() {
         this.setActing(false)
@@ -143,6 +151,7 @@ class Room {
             redis.del(userid)
         })
         this.actusers = []
+        redis.hdel("rooms", this.roomid)
     }
 }
 module.exports.Rooms = Rooms

@@ -28,20 +28,20 @@ class Sock {
             await Promise.all([this.pubClient.connect(), this.subClient.connect()]);
             this.io.adapter(createAdapter(this.pubClient, this.subClient));
             instrument(this.io, { auth: false });
-            console.log(`Socket.IO server with Redis adapter initialized on port ${this.config.port}`);
+            //console.log(`Socket.IO server with Redis adapter initialized on port ${this.config.port}`);
         } catch (err) {
-            console.error("Redis 连接失败：", err);
+            //console.error("Redis 连接失败：", err);
         }
     }
     // 使用 Emitter 发送消息的方法
     sendMessage(event, message) {
         this.emitter.emit(event, message);
-        console.log(`Message sent: ${event} - ${message}`);
+        //console.log(`Message sent: ${event} - ${message}`);
     }
     // 使用 Emitter 发送消息到某个房间的方法
     sendMessageToRoom(room, event, message) {
         this.emitter.to(room).emit(event, message);
-        console.log(`Message sent to room ${room}: ${event} - ${message}`);
+        //console.log(`Message sent to room ${room}: ${event} - ${message}`);
     }
 }
 

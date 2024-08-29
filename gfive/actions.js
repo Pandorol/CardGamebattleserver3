@@ -11,10 +11,11 @@ class gfiveAction {
         [gfiveCMD.startact]: (player, data) => {
             let roomid = player.data.roomid
             let room = global.rooms.getRoom(roomid)
-            if (!room.fullplayers()) {
-                player.socket.emit(CommonCMD.cmdheadler, { cmd: gfiveCMD.startact, code: retcode.nofull })
-            }
-            else if (player.userid != room.getOwner()) {
+            // if (!room.fullplayers()) {
+            //     player.socket.emit(CommonCMD.cmdheadler, { cmd: gfiveCMD.startact, code: retcode.nofull })
+            // }
+            // else
+            if (player.userid != room.getOwner()) {
                 player.socket.emit(CommonCMD.cmdheadler, { cmd: gfiveCMD.startact, code: retcode.noOwner })
             }
             else {
@@ -33,7 +34,7 @@ class gfiveAction {
                 player.socket.emit(CommonCMD.cmdheadler, { cmd: gfiveCMD.getroomlist, roomList: roomList, code: retcode.suc })
             }
             catch (err) {
-                console.log(err)
+                //console.log(err)
                 player.socket.emit(CommonCMD.cmdheadler, { cmd: gfiveCMD.getroomlist, roomList: [], code: retcode.commonerror })
             }
         },
@@ -50,6 +51,11 @@ class gfiveAction {
             player.data.kickpos = Array.from(new Set(player.data.kickpos))
             let room = global.rooms.getRoom(player.data.roomid)
             room.broadcast(CommonCMD.cmdheadler, { cmd: gfiveCMD.kickpos, userid: player.userid, kickpos: player.data.kickpos })
+            redis.set(player.userid, JSON.stringify(player.data))
+        },
+        [gfiveCMD.atpos]: async (player, data) => {
+            player.set('atpos', { x: data.x, y: data.y })
+            player.broadcastroom(CommonCMD.cmdheadler, { cmd: gfiveCMD.atpos, userid: player.userid, atpos: player.data.atpos })
             redis.set(player.userid, JSON.stringify(player.data))
         }
     }

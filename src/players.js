@@ -55,7 +55,9 @@ class Player {
         })
         return result;
     }
-
+    broadcastroom(eventName, data) {
+        this.socket.to(this.data.roomid).emit(eventName, data)
+    }
     delete(key) {
         delete this.data[key];
     }
