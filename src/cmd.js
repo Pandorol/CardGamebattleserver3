@@ -5,7 +5,8 @@ CommonCMD = {
     leaveroom: "leaveroom",
     rejoinroomsuc: "rejoinroomsuc",
     roomdatas: "roomdatas",
-    newOwner: "newOwner"
+    newOwner: "newOwner",
+    toast: "toast"
 }
 gfiveCMD = {
     startact: "startact",
@@ -14,6 +15,8 @@ gfiveCMD = {
     readystatus: "readystatus",
     kickpos: "kickpos",
     atpos: "atpos",
+    cardmove: "cardmove",
+    toast: "toast"
 }
 module.exports = {
     CommonCMD,

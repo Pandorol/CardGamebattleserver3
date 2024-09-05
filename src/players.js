@@ -24,6 +24,7 @@ class Players {
     }
     leave(player) {
         global.rooms.leave(player.data.roomid, player.userid)
+        console.log("user:" + player.userid + " leave room" + player.data.roomid)
     }
 }
 class Player {
@@ -57,6 +58,9 @@ class Player {
     }
     broadcastroom(eventName, data) {
         this.socket.to(this.data.roomid).emit(eventName, data)
+    }
+    emit(eventName, data) {
+        this.socket.emit(eventName, data)
     }
     delete(key) {
         delete this.data[key];

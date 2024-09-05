@@ -1,5 +1,6 @@
 const { CommonCMD, gfiveCMD } = require("../src/cmd")
 const redis = require("../src/redismgr")
+const actionhelp = require("./actionshelp")
 retcode = {
     suc: 0,
     nofull: 1,
@@ -8,7 +9,7 @@ retcode = {
 }
 class gfiveAction {
     actions = {
-        [gfiveCMD.startact]: (player, data) => {
+        [gfiveCMD.startact]: async (player, data) => {
             let roomid = player.data.roomid
             let room = global.rooms.getRoom(roomid)
             // if (!room.fullplayers()) {
@@ -19,8 +20,21 @@ class gfiveAction {
                 player.socket.emit(CommonCMD.cmdheadler, { cmd: gfiveCMD.startact, code: retcode.noOwner })
             }
             else {
+                let players = room.playerList
+                let userids = Object.keys(players)
+                for (let i = 0; i < userids.length; i++) {
+                    let userid = userids[i]
+                    players[userid].data.team = i
+                    players[userid].data.actdesk = await actionhelp.AddUserStartActDesk(userid)
+                    players[userid].data.actdesk = actionhelp.InitActMap(players[userid])
+                    players[userid].data.turn = 0
+                    players[userid].data.leftsteps = 1
+                    players[userid].emit(CommonCMD.cmdheadler, { cmd: gfiveCMD.startact, code: retcode.suc, mydata: players[userid].data })
+                }
+
+
                 room.setActStart()
-                room.broadcast(CommonCMD.cmdheadler, { cmd: gfiveCMD.startact, code: retcode.suc })
+                //room.broadcast(CommonCMD.cmdheadler, { cmd: gfiveCMD.startact, code: retcode.suc })
             }
         },
         [gfiveCMD.endact]: (player, data) => {
@@ -57,6 +71,9 @@ class gfiveAction {
             player.set('atpos', { x: data.x, y: data.y })
             player.broadcastroom(CommonCMD.cmdheadler, { cmd: gfiveCMD.atpos, userid: player.userid, atpos: player.data.atpos })
             redis.set(player.userid, JSON.stringify(player.data))
+        },
+        [gfiveCMD.cardmove]: (player, data) => {
+
         }
     }
 

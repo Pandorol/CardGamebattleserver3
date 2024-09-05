@@ -1,4 +1,7 @@
 module.exports = {
+    keys: {
+        cards: "cards"
+    },
     set(key, value) {
         global.datacli.set(key, value)
     },

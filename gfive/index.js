@@ -2,9 +2,10 @@ const config = require('./config');
 const { CommonCMD } = require("../src/cmd")
 const gfiveAction = require('./actions');
 const util = require('../src/util');
-const { Sock } = require("../src/sock");
+const { Sock } = require("../src/Sock");
 const { Players } = require("../src/players");
 const { Rooms } = require("../src/rooms")
+const { MySQLMgr } = require("../src/mysqlmgr")
 const redis = require("../src/redismgr")
 
 global.config = config
@@ -13,11 +14,13 @@ global.action = new gfiveAction()
 global.players = new Players(config)
 global.rooms = new Rooms()
 global.datacli = global.sock.dataclient
-
+global.mysqlmgr = new MySQLMgr(config.mysqlconfig)
 
 sock.io.on("connection", (socket) => {
     const roomid = socket.handshake.query.roomid;
     const userid = socket.handshake.query.userid;
+
+
 
     if (!roomid) {
         socket.emit('error', { msg: 'Room ID is missing.' });
