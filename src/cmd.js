@@ -16,7 +16,10 @@ gfiveCMD = {
     kickpos: "kickpos",
     atpos: "atpos",
     cardmove: "cardmove",
-    toast: "toast"
+    toast: "toast",
+    endturn: "endturn",
+    actatkcard: "actatkcard",
+    actatkflag: "actatkflag"
 }
 module.exports = {
     CommonCMD,

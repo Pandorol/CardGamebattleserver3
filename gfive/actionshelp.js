@@ -16,6 +16,8 @@ class actionhelp {
                     cardid: player.data.actdesk[i - 1],
                     orgownerid: player.userid,
                     ownerid: player.userid,
+                    readycamp: 0,
+                    alive: 1
                 }
                 newactdesk.push(this.actmap[pos])
             }
@@ -28,6 +30,8 @@ class actionhelp {
                     cardid: player.data.actdesk[i - 1],
                     orgownerid: player.userid,
                     ownerid: player.userid,
+                    readycamp: 0,
+                    alive: 1
                 }
                 newactdesk.push(this.actmap[pos])
             }
@@ -42,6 +46,8 @@ class actionhelp {
                     cardid: player.data.actdesk[i - 1],
                     orgownerid: player.userid,
                     ownerid: player.userid,
+                    readycamp: 0,
+                    alive: 1
                 }
                 newactdesk.push(this.actmap[pos])
             }
@@ -54,11 +60,15 @@ class actionhelp {
                     cardid: player.data.actdesk[i - 1],
                     orgownerid: player.userid,
                     ownerid: player.userid,
+                    readycamp: 0,
+                    alive: 1
                 }
                 newactdesk.push(this.actmap[pos])
             }
         }
-
+        this.actmap[24] = {
+            damges: {}//team:0,score:0
+        }
 
         return newactdesk
     }

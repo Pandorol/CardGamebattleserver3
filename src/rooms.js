@@ -64,7 +64,8 @@ class Room {
         this.playerList = {}; // 房间中的玩家列表
         this.owner = null; // 房主的 userid
         this.acting = false;
-        this.actusers = []
+        this.actusers = [];
+        this.actdata = {}
     }
 
     addPlayer(userid) {

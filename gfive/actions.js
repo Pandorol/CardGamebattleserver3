@@ -27,14 +27,17 @@ class gfiveAction {
                     players[userid].data.team = i
                     players[userid].data.actdesk = await actionhelp.AddUserStartActDesk(userid)
                     players[userid].data.actdesk = actionhelp.InitActMap(players[userid])
-                    players[userid].data.turn = 0
-                    players[userid].data.leftsteps = 1
-                    players[userid].emit(CommonCMD.cmdheadler, { cmd: gfiveCMD.startact, code: retcode.suc, mydata: players[userid].data })
+                    room.actdata.turn = 0
+                    room.actdata.sumturn = 0
+                    room.actdata.leftsteps = 1
+                    //players[userid].emit(CommonCMD.cmdheadler, { cmd: gfiveCMD.startact, code: retcode.suc, mydata: players[userid].data })
                 }
 
 
                 room.setActStart()
-                //room.broadcast(CommonCMD.cmdheadler, { cmd: gfiveCMD.startact, code: retcode.suc })
+                room.broadcast(CommonCMD.cmdheadler, { cmd: gfiveCMD.startact, code: retcode.suc, roomdata: JSON.parse(JSON.stringify(room)) })
+                //room.broadcast(CommonCMD.cmdheadler, { cmd: CommonCMD.roomdatas, datas: JSON.parse(JSON.stringify(room)) })
+
             }
         },
         [gfiveCMD.endact]: (player, data) => {
@@ -73,8 +76,46 @@ class gfiveAction {
             redis.set(player.userid, JSON.stringify(player.data))
         },
         [gfiveCMD.cardmove]: (player, data) => {
+            data.coststep
+            data.cardpos
+            data.targrtpos
+            //moveuser: player.userid
+            //movecard: data.cardpos
+            //targrtpos: data.targrtpos
+            //turn : player.data.team
+            //leftsteps:leftdtep-data.coststep
+            //
+        },
+        [gfiveCMD.endturn]: (player, data) => {
+            //turn : player.data.team+1%maxnum
+            //leftsteps:config.steps[sumturn]
 
-        }
+        },
+        [gfiveCMD.actatkcard]: (player, data) => {
+            data.coststep
+            data.cardpos
+            data.targrtpos
+            data.resultatkcard//{}
+            data.resulttargetcard//{}
+            //atkuser: player.userid
+            //atkcardpos: data.cardpos
+            //atkcard:data.resultatkcard
+            //targrtpos: data.targrtpos
+            //targrtcard.resulttargetcard
+            //turn : player.data.team
+            //leftsteps:leftdtep-data.coststep
+            //
+            //
+        },
+        [gfiveCMD.actatkflag]: (player, data) => {
+            data.coststep
+            data.cardpos
+            data.atkscore
+            //flagscore:
+
+        },
+
+
     }
 
 
