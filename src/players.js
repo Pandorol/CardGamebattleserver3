@@ -59,6 +59,9 @@ class Player {
     broadcastroom(eventName, data) {
         this.socket.to(this.data.roomid).emit(eventName, data)
     }
+    setredies() {
+        redis.set(this.userid, JSON.stringify(this.data))
+    }
     emit(eventName, data) {
         this.socket.emit(eventName, data)
     }

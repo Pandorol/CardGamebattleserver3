@@ -146,6 +146,10 @@ class Room {
         })
         redis.hset("rooms", this.roomid, JSON.stringify(this))
     }
+
+    setredis() {
+        redis.hset("rooms", this.roomid, JSON.stringify(this))
+    }
     setActEnd() {
         this.setActing(false)
         this.actusers.forEach((userid) => {
