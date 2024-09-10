@@ -244,7 +244,15 @@ class gfiveAction {
             }
 
         },
-
+        [gfiveCMD.loser]: (player, data) => {
+            let room = global.rooms.getRoom(player.data.roomid)
+            if (room.actdata.turn != player.data.team) {
+                player.socket.emit(CommonCMD.cmdheadler, { cmd: gfiveCMD.toast, msg: lan.zh.noyourturn })
+                return
+            }
+            room.setActEnd()
+            room.broadcast(CommonCMD.cmdheadler, { cmd: gfiveCMD.endact, loser: player.userid, damages: room.actdata.actmap[24].damages })
+        },
 
     }
 

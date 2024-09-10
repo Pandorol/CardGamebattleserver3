@@ -19,7 +19,8 @@ gfiveCMD = {
     toast: "toast",
     endturn: "endturn",
     actatkcard: "actatkcard",
-    actatkflag: "actatkflag"
+    actatkflag: "actatkflag",
+    loser: "loser",
 }
 module.exports = {
     CommonCMD,
