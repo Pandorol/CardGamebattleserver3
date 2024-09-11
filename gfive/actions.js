@@ -73,9 +73,9 @@ class gfiveAction {
             redis.set(player.userid, JSON.stringify(player.data))
         },
         [gfiveCMD.atpos]: async (player, data) => {
-            player.set('atpos', { x: data.x, y: data.y })
-            player.broadcastroom(CommonCMD.cmdheadler, { cmd: gfiveCMD.atpos, userid: player.userid, atpos: player.data.atpos })
-            redis.set(player.userid, JSON.stringify(player.data))
+            // player.set('atpos', { x: data.x, y: data.y })
+            // player.broadcastroom(CommonCMD.cmdheadler, { cmd: gfiveCMD.atpos, userid: player.userid, atpos: player.data.atpos })
+            // redis.set(player.userid, JSON.stringify(player.data))
         },
         [gfiveCMD.cardmove]: (player, data) => {
             //data.coststep
