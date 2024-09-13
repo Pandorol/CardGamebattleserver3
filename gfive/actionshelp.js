@@ -23,7 +23,7 @@ class actionhelp {
                     cardid: player.data.actdesk[i - 1],
                     orgownerid: player.userid,
                     ownerid: player.userid,
-                    readycamp: 0,
+                    readycamp: 1,
                     alive: 1
                 }
                 actmap[pos] = actpos
@@ -37,7 +37,7 @@ class actionhelp {
                     cardid: player.data.actdesk[i - 1],
                     orgownerid: player.userid,
                     ownerid: player.userid,
-                    readycamp: 0,
+                    readycamp: 1,
                     alive: 1
                 }
                 actmap[pos] = actpos
@@ -53,7 +53,7 @@ class actionhelp {
                     cardid: player.data.actdesk[i - 1],
                     orgownerid: player.userid,
                     ownerid: player.userid,
-                    readycamp: 0,
+                    readycamp: 1,
                     alive: 1
                 }
                 actmap[pos] = actpos
@@ -67,7 +67,7 @@ class actionhelp {
                     cardid: player.data.actdesk[i - 1],
                     orgownerid: player.userid,
                     ownerid: player.userid,
-                    readycamp: 0,
+                    readycamp: 1,
                     alive: 1
                 }
                 actmap[pos] = actpos

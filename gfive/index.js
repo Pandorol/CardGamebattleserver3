@@ -57,7 +57,7 @@ sock.io.on("connection", (socket) => {
             let room = global.rooms.getRoom(roomid)
             room.broadcast(CommonCMD.cmdheadler, { cmd: CommonCMD.rejoinroomsuc, player: { userid: userid, data: player.data } })
             //console.log(JSON.parse(JSON.stringify(room)))
-            player.socket.emit(CommonCMD.cmdheadler, { cmd: CommonCMD.roomdatas, datas: JSON.parse(JSON.stringify(room)) })
+            player.socket.emit(CommonCMD.cmdheadler, { cmd: CommonCMD.roomdatas, roomdatas: JSON.parse(JSON.stringify(room)) })
             //console.log(`User ${userid} rejoined room ${roomid}`);
         }
         else {
@@ -78,7 +78,7 @@ sock.io.on("connection", (socket) => {
     }
     if (roomExists) {
         if (!global.rooms.canAddToRoom(roomid)) { // 房间已满
-            socket.emit('error', { msg: 'Room is full.' });
+            socket.emit(CommonCMD.cmdheadler, { cmd: CommonCMD.toast, msg: 'Room is full.' });
             socket.disconnect();
             //console.log(`Connection disconnected: Room ${roomid} is full for socket ${socket.id}`);
             return;

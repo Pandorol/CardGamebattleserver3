@@ -34,10 +34,9 @@ class gfiveAction {
                     room.actdata.leftsteps = 1
 
                 }
-                room.actdata.center = { damges: 0, from: 0 }
-                room.actdata.actmap[24] = { hp: 500, dfs: 10, damages: {} }
+                room.actdata.center = { damges: 0, from: 0, hp: 500, dfs: 10, alldamages: {} }
                 room.setActStart()
-                room.broadcast(CommonCMD.cmdheadler, { cmd: gfiveCMD.startact, code: retcode.suc, roomdata: JSON.parse(JSON.stringify(room)) })
+                room.broadcast(CommonCMD.cmdheadler, { cmd: gfiveCMD.startact, code: retcode.suc, roomdatas: JSON.parse(JSON.stringify(room)) })
                 //room.broadcast(CommonCMD.cmdheadler, { cmd: CommonCMD.roomdatas, datas: JSON.parse(JSON.stringify(room)) })
 
             }
@@ -128,7 +127,7 @@ class gfiveAction {
                 player.socket.emit(CommonCMD.cmdheadler, { cmd: gfiveCMD.toast, msg: lan.zh.noyourturn })
                 return
             }
-            room.actdata.turn = (player.data.team + 1) % global.config.maxPlayerNum
+            room.actdata.turn = (player.data.team + 1) % room.actusers.length
             room.actdata.sumturn = room.actdata.sumturn + 1
             room.actdata.leftsteps = actionhelp.getturnsteps(room.actdata.sumturn)
             room.setredis()
@@ -216,10 +215,10 @@ class gfiveAction {
                 return
             }
             room.actdata.leftsteps = room.actdata.leftsteps - data.coststep
-            if (!room.actdata.actmap[24].damages[player.userid]) {
-                room.actdata.actmap[24].damages[player.userid] = 0
+            if (!room.actdata.center.alldamages[player.userid]) {
+                room.actdata.center.alldamages[player.userid] = 0
             }
-            room.actdata.actmap[24].damages[player.userid] += data.atkscore
+            room.actdata.center.all.damages[player.userid] += data.atkscore
             if (room.actdata.center.from == player.userid || room.actdata.center.damges == 0) {
                 room.actdata.center.damges += data.atkscore
                 room.actdata.center.from = player.userid
@@ -260,6 +259,7 @@ class gfiveAction {
 
 
     act(player, data) {
+        console.log(data)
         if (this.actions[data.cmd]) {  // 检查命令是否存在
             this.actions[data.cmd](player, data);
         } else {
