@@ -24,7 +24,8 @@ class actionhelp {
                     orgownerid: player.userid,
                     ownerid: player.userid,
                     readycamp: 1,
-                    alive: 1
+                    alive: 1,
+                    atkturn: 0
                 }
                 actmap[pos] = actpos
             }
@@ -38,7 +39,8 @@ class actionhelp {
                     orgownerid: player.userid,
                     ownerid: player.userid,
                     readycamp: 1,
-                    alive: 1
+                    alive: 1,
+                    atkturn: 0
                 }
                 actmap[pos] = actpos
             }
@@ -54,7 +56,8 @@ class actionhelp {
                     orgownerid: player.userid,
                     ownerid: player.userid,
                     readycamp: 1,
-                    alive: 1
+                    alive: 1,
+                    atkturn: 0
                 }
                 actmap[pos] = actpos
             }
@@ -68,7 +71,8 @@ class actionhelp {
                     orgownerid: player.userid,
                     ownerid: player.userid,
                     readycamp: 1,
-                    alive: 1
+                    alive: 1,
+                    atkturn: 0
                 }
                 actmap[pos] = actpos
             }

@@ -34,7 +34,7 @@ class gfiveAction {
                     room.actdata.leftsteps = 1
 
                 }
-                room.actdata.center = { damges: 0, from: 0, hp: 500, dfs: 10, alldamages: {} }
+                room.actdata.center = { damages: 0, from: 0, hp: 300, dfs: 10, alldamages: {} }
                 room.setActStart()
                 room.broadcast(CommonCMD.cmdheadler, { cmd: gfiveCMD.startact, code: retcode.suc, roomdatas: JSON.parse(JSON.stringify(room)) })
                 //room.broadcast(CommonCMD.cmdheadler, { cmd: CommonCMD.roomdatas, datas: JSON.parse(JSON.stringify(room)) })
@@ -156,16 +156,18 @@ class gfiveAction {
                 player.socket.emit(CommonCMD.cmdheadler, { cmd: gfiveCMD.toast, msg: lan.zh.stepnoenough })
                 return
             }
-            if (room.actdata.actmap[data.cardpos].ownerid != player.userid) {
+            //console.log(room.actdata.actmap[data.cardposbefore])
+            if (room.actdata.actmap[data.cardposbefore].ownerid != player.userid) {
                 player.socket.emit(CommonCMD.cmdheadler, { cmd: gfiveCMD.toast, msg: lan.zh.nocardowner })
                 return
             }
 
             room.actdata.actmap[data.cardposafter] = data.resultatkcard
-            room.actdata.actmap[data.targrtposafter] = data.resulttargetcard
+
             if (data.cardposbefore != data.cardposafter) {
                 delete room.actdata.actmap[data.cardposbefore]
             }
+            room.actdata.actmap[data.targrtposafter] = data.resulttargetcard
             if (data.targrtposbefore != data.targrtposafter) {
                 delete room.actdata.actmap[data.targrtposbefore]
             }
@@ -218,15 +220,15 @@ class gfiveAction {
             if (!room.actdata.center.alldamages[player.userid]) {
                 room.actdata.center.alldamages[player.userid] = 0
             }
-            room.actdata.center.all.damages[player.userid] += data.atkscore
-            if (room.actdata.center.from == player.userid || room.actdata.center.damges == 0) {
-                room.actdata.center.damges += data.atkscore
+            room.actdata.center.alldamages[player.userid] += data.atkscore
+            if (room.actdata.center.from == player.userid || room.actdata.center.damages == 0) {
+                room.actdata.center.damages += data.atkscore
                 room.actdata.center.from = player.userid
             }
             else {
-                room.actdata.center.damges -= data.atkscore
-                if (room.actdata.center.damges < 0) {
-                    room.actdata.center.damges = -room.actdata.center.damges
+                room.actdata.center.damages -= data.atkscore
+                if (room.actdata.center.damages < 0) {
+                    room.actdata.center.damages = -room.actdata.center.damages
                     room.actdata.center.from = player.userid
                 }
             }
@@ -235,11 +237,13 @@ class gfiveAction {
                 cmd: gfiveCMD.actatkflag,
                 turn: room.actdata.turn,
                 leftsteps: room.actdata.leftsteps,
-                flagcenter: room.actdata.center
+                flagcenter: room.actdata.center,
+                cardpos: data.cardpos
             })
-            if (room.actdata.center.from >= room.actdata.actmap[24].hp) {
+            console.log(room.actdata.center.damages)
+            if (room.actdata.center.damages >= room.actdata.center.hp) {
                 room.setActEnd()
-                room.broadcast(CommonCMD.cmdheadler, { cmd: gfiveCMD.endact, winuser: room.actdata.center.from, damages: room.actdata.actmap[24].damages })
+                room.broadcast(CommonCMD.cmdheadler, { cmd: gfiveCMD.endact, winuser: room.actdata.center.from, alldamages: room.actdata.center.alldamages })
             }
 
         },
